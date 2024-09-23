@@ -2,7 +2,7 @@
 
 # Esegui composer install
 docker exec -ti laravel composer install
-docker exec -ti laravel copy .env.docker .env
+docker exec -ti laravel cp /var/www/laravel/.env.docker /var/www/laravel/.env
 docker exec -ti laravel php artisan key:generate
 docker exec -ti laravel php artisan migrate
 docker exec -ti laravel php artisan passport:keys
