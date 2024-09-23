@@ -1,0 +1,61 @@
+version: "3.5"
+
+services:
+    nginx:
+        image: nginx:stable-bullseye
+        container_name: nginx-dev
+        restart: always
+        networks:
+            - laravel_network
+        depends_on:
+            - laravel
+        volumes:
+            - ./nginx/:/etc/nginx/conf.d/
+            - ../:/var/www/laravel
+        ports:
+            - "8084:80"
+
+    laravel:
+        build:
+            args:
+                user: ${PHP_USER}
+                uid: ${PHP_UID}
+            context: ../
+            dockerfile: ./docker/Dockerfile
+        user: ${PHP_UID}:${PHP_UID}
+        container_name: laravel
+        restart: always
+        working_dir: /var/www/laravel
+        env_file:
+            - .env
+        depends_on:
+            - mysql
+        volumes:
+            - ../:/var/www/laravel
+        networks:
+            - laravel_network
+
+    mysql:
+        image: mysql:8.0
+        container_name: mysql
+        restart: always
+        environment:
+            MYSQL_DATABASE: laravel
+            MYSQL_USER: user
+            MYSQL_PASSWORD: password
+            MYSQL_ROOT_PASSWORD: rootpassword
+        volumes:
+            - mysql_data:/var/lib/mysql
+        networks:
+            - laravel_network
+
+
+volumes:
+    mysql_data:
+        driver: local
+
+networks:
+    laravel_network:
+        driver: bridge
+
+

@@ -10,22 +10,28 @@ trait TokenManagement
     /**
      * @param $email
      * @param $password
-     * @return array
+     * @return string
      */
-    public function getTokenRefreshToken($email, $password): array
+    public function getTokenRefreshToken($email, $password)
     {
-        $baseUrl = url('/');
+        $baseUrl = env('APP_URL');
         $osClient = DB::table('oauth_clients')->where('id',2)->first();
-        $response = Http::post("{$baseUrl}/oauth/token", [
-            'username' => $email,
-            'password' => $password,
-            'client_id' => $osClient->id,
-            'client_secret' => $osClient->secret,
-            'grant_type' => 'password',
-            'scope' => '',
-        ]);
+        try {
+            $response = Http::post($baseUrl."/oauth/token", [
+                'username' => $email,
+                'password' => $password,
+                'client_id' => $osClient->id,
+                'client_secret' => $osClient->secret,
+                'grant_type' => 'password',
+                'scope' => '',
+            ]);
 
-        return  json_decode($response->getBody(), true);
+            return  json_decode($response->getBody(), true);
+
+        }catch (\Exception $exception){
+            return $exception->getMessage();
+        }
+
     }
 
     /**
