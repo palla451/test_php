@@ -20,7 +20,7 @@ class LoginControllerTest extends TestCase
             $baseUrl = url('/');
             $user = Auth::user();
             $osClient = DB::table('oauth_clients')->where('id',2)->first();
-            Http::post("{$baseUrl}/oauth/token", [
+            $result = Http::post("{$baseUrl}/oauth/token", [
                 'username' => $user->email,
                 'password' => 'password',
                 'client_id' => $osClient->id,
@@ -29,7 +29,7 @@ class LoginControllerTest extends TestCase
                 'scope' => '',
             ]);
 
-            echo 'credential valid';
+            echo ('access_token: '. json_decode($result->getBody()->getContents())->access_token);
             $this->assertTrue(true);
         }
         else

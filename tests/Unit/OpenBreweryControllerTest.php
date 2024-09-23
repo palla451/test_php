@@ -19,8 +19,7 @@ class OpenBreweryControllerTest extends TestCase
         $url = env('BASE_URI').'breweries';
         try {
             $results = Http::get($url);
-            $response = json_decode($results->getBody());
-            echo 'success connect to openbrewerydb';
+            echo $results;
             $this->assertTrue(true);
         }catch (\Exception $exception){
             echo 'success connect to openbrewerydb';
