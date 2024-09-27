@@ -5,3 +5,4 @@
 5. da bash lanciare lo script ./init.sh
 6. per avviare i test PHPUnit se necessario fornire i permessi 777 da bash allo script test.sh, "chmod -R 777 test.sh"
 7. da bash lanciare lo script ./test.sh
+8. l'applicativo sarà raggiungibile http://localhost:8084
